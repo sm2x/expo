@@ -88,7 +88,7 @@ runtimeVersion:(NSString *)runtimeVersion
   jsBundleAsset.isLaunchAsset = YES;
   jsBundleAsset.nsBundleFilename = kEXUpdatesEmbeddedBundleFilename;
   jsBundleAsset.filename = [NSString stringWithFormat:@"%@.%@",
-                              [EXUpdatesUtils sha1WithData:[[bundleUrl absoluteString] dataUsingEncoding:NSUTF8StringEncoding]],
+                              [EXUpdatesUtils sha256WithData:[[bundleUrl absoluteString] dataUsingEncoding:NSUTF8StringEncoding]],
                               kEXUpdatesEmbeddedBundleFileType];
   [processedAssets addObject:jsBundleAsset];
 
@@ -116,7 +116,7 @@ runtimeVersion:(NSString *)runtimeVersion
     }
 
     asset.filename = [NSString stringWithFormat:@"%@.%@",
-                        [EXUpdatesUtils sha1WithData:[(NSString *)urlString dataUsingEncoding:NSUTF8StringEncoding]],
+                        [EXUpdatesUtils sha256WithData:[(NSString *)urlString dataUsingEncoding:NSUTF8StringEncoding]],
                         type];
 
     [processedAssets addObject:asset];
@@ -173,7 +173,7 @@ runtimeVersion:(NSString *)runtimeVersion
   jsBundleAsset.isLaunchAsset = YES;
   jsBundleAsset.nsBundleFilename = kEXUpdatesEmbeddedBundleFilename;
   jsBundleAsset.filename = [NSString stringWithFormat:@"%@.%@",
-                              [EXUpdatesUtils sha1WithData:[[bundleUrl absoluteString] dataUsingEncoding:NSUTF8StringEncoding]],
+                              [EXUpdatesUtils sha256WithData:[[bundleUrl absoluteString] dataUsingEncoding:NSUTF8StringEncoding]],
                               kEXUpdatesEmbeddedBundleFileType];
   [processedAssets addObject:jsBundleAsset];
 
@@ -202,7 +202,7 @@ runtimeVersion:(NSString *)runtimeVersion
     asset.nsBundleFilename = filename;
 
     asset.filename = [NSString stringWithFormat:@"%@.%@",
-                        [EXUpdatesUtils sha1WithData:[[url absoluteString] dataUsingEncoding:NSUTF8StringEncoding]],
+                        [EXUpdatesUtils sha256WithData:[[url absoluteString] dataUsingEncoding:NSUTF8StringEncoding]],
                         type];
 
     [processedAssets addObject:asset];

@@ -131,7 +131,7 @@ static NSString * const kEXUpdatesAppLauncherErrorDomain = @"AppLauncher";
       if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         asset.headers = ((NSHTTPURLResponse *)response).allHeaderFields;
       }
-      asset.contentHash = [EXUpdatesUtils sha1WithData:data];
+      asset.contentHash = [EXUpdatesUtils sha256WithData:data];
       asset.downloadTime = [NSDate date];
       [self _assetDownloadDidFinish:asset withLocalUrl:assetLocalUrl];
     } errorBlock:^(NSError * _Nonnull error, NSURLResponse * _Nonnull response) {
