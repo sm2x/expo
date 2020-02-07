@@ -18,6 +18,8 @@ typedef NS_ENUM(NSInteger, EXUpdatesCheckAutomaticallyConfig) {
 @property (nonatomic, readonly) NSString * _Nullable sdkVersion;
 @property (nonatomic, readonly) NSString * _Nullable runtimeVersion;
 
+@property (nonatomic, readonly) BOOL usesLegacyManifest;
+
 + (instancetype)sharedInstance;
 
 @end

@@ -31,8 +31,7 @@ typedef NS_ENUM(NSInteger, EXUpdatesUpdateStatus) {
                       status:(EXUpdatesUpdateStatus)status
                         keep:(BOOL)keep;
 
-+ (instancetype)updateWithBareManifest:(NSDictionary *)bareManifest;
-+ (instancetype)updateWithManagedManifest:(NSDictionary *)managedManifest;
++ (instancetype)updateWithManifest:(NSDictionary *)manifest;
 
 @end
 

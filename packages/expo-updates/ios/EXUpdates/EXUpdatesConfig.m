@@ -90,6 +90,13 @@ static NSString * const kEXUpdatesDefaultReleaseChannelName = @"default";
   }
 
   NSAssert(_sdkVersion || _runtimeVersion, @"One of sdkVersion or runtimeVersion must be defined in expo-config.plist");
+  
+  id usesLegacyManifest = config[@"usesLegacyManifest"];
+  if (usesLegacyManifest && [usesLegacyManifest isKindOfClass:[NSNumber class]]) {
+    _usesLegacyManifest = [(NSNumber *)usesLegacyManifest boolValue];
+  } else {
+    _usesLegacyManifest = YES;
+  }
 }
 
 @end
