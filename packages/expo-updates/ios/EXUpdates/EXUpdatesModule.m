@@ -69,9 +69,14 @@ UM_EXPORT_METHOD_AS(checkForUpdateAsync,
     EXUpdatesUpdate *launchedUpdate = [EXUpdatesAppController sharedInstance].launchedUpdate;
     id<EXUpdatesSelectionPolicy> selectionPolicy = [EXUpdatesAppController sharedInstance].selectionPolicy;
     if ([selectionPolicy shouldLoadNewUpdate:update withLaunchedUpdate:launchedUpdate]) {
-      resolve(update.rawManifest);
+      resolve(@{
+        @"isAvailable": @(YES),
+        @"manifest": update.rawManifest
+      });
     } else {
-      resolve(@(NO));
+      resolve(@{
+        @"isAvailable": @(NO)
+      });
     }
   } errorBlock:^(NSError * _Nonnull error, NSURLResponse * _Nonnull response) {
     reject(@"ERR_UPDATES_CHECK", error.localizedDescription, error);
@@ -113,9 +118,14 @@ UM_EXPORT_METHOD_AS(fetchUpdateAsync,
 {
   if (_fetchUpdateResolver) {
     if (update) {
-      _fetchUpdateResolver(update.rawManifest);
+      _fetchUpdateResolver(@{
+        @"isNew": @(YES),
+        @"manifest": update.rawManifest
+      });
     } else {
-      _fetchUpdateResolver(@(NO));
+      _fetchUpdateResolver(@{
+        @"isNew": @(NO)
+      });
     }
   }
   _fetchUpdateResolver = nil;
