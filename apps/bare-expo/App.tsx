@@ -3,6 +3,19 @@ import React from 'react';
 import MainNavigator from './MainNavigator';
 import { createProxy, startAsync, addListener } from './relapse/client';
 
+import * as Notifications from 'expo-notifications';
+
+Notifications.scheduleNotificationAsync(
+  'abc',
+  {
+    title: 'Scheduled',
+    message: 'notification',
+  },
+  {
+    hour: 8,
+  }
+);
+
 export default function Main() {
   // @ts-ignore
   if (global.DETOX) {

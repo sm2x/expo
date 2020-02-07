@@ -551,6 +551,8 @@ CACHE_KEYS:
       - "../../../../packages/expo-notifications/ios/EXNotifications/PushToken/EXPushTokenManager.m"
       - "../../../../packages/expo-notifications/ios/EXNotifications/PushToken/EXPushTokenModule.h"
       - "../../../../packages/expo-notifications/ios/EXNotifications/PushToken/EXPushTokenModule.m"
+      - "../../../../packages/expo-notifications/ios/EXNotifications/Scheduling/EXNotificationSchedulerModule.h"
+      - "../../../../packages/expo-notifications/ios/EXNotifications/Scheduling/EXNotificationSchedulerModule.m"
     PROJECT_NAME: EXNotifications
     SPECS:
       - EXNotifications (1.0.0)

@@ -1,5 +1,6 @@
-<manifest package="expo.modules.notifications"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="expo.modules.notifications">
+
     <application>
         <service
             android:name=".FirebaseListenerService"
@@ -8,5 +9,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".notifications.ExpoNotificationsService"
+            android:exported="false" />
     </application>
 </manifest>
