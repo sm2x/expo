@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSURL *fileUrl = [updatesDirectory URLByAppendingPathComponent:relativePath];
     NSError *err;
-    if ([fileManager removeItemAtURL:fileUrl error:&err]) {
+    if (![fileManager fileExistsAtPath:fileUrl.path] || [fileManager removeItemAtURL:fileUrl error:&err]) {
       [deletedAssets addObject:assetId];
     } else {
       [erroredAssets addObject:asset];
@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSURL *fileUrl = [updatesDirectory URLByAppendingPathComponent:relativePath];
     NSError *err;
-    if ([fileManager removeItemAtURL:fileUrl error:&err]) {
+    if (![fileManager fileExistsAtPath:fileUrl.path] || [fileManager removeItemAtURL:fileUrl error:&err]) {
       [deletedAssets addObject:assetId];
       [erroredAssets removeObject:asset];
     } else {
