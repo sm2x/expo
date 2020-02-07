@@ -27,7 +27,7 @@ NSString * const kEXUpdatesEmbeddedBundleFileType = @"bundle";
         NSLog(@"Could not read embedded manifest: %@", [err localizedDescription]);
       } else {
         NSAssert([manifest isKindOfClass:[NSDictionary class]], @"embedded manifest should be a valid JSON file");
-        embeddedManifest = [EXUpdatesUpdate updateWithManagedManifest:(NSDictionary *)manifest];
+        embeddedManifest = [EXUpdatesUpdate updateWithManifest:(NSDictionary *)manifest];
       }
     }
   });

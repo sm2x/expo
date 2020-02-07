@@ -88,7 +88,7 @@ NSTimeInterval const kEXUpdatesDefaultTimeoutInterval = 60;
                                                     NSError *err;
                                                     id innerManifest = [NSJSONSerialization JSONObjectWithData:[(NSString *)innerManifestString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&err];
                                                     NSAssert(!err && innerManifest && [innerManifest isKindOfClass:[NSDictionary class]], @"manifest should be a valid JSON object");
-                                                    EXUpdatesUpdate *update = [EXUpdatesUpdate updateWithManagedManifest:(NSDictionary *)innerManifest];
+                                                    EXUpdatesUpdate *update = [EXUpdatesUpdate updateWithManifest:(NSDictionary *)innerManifest];
                                                     successBlock(update);
                                                   } else {
                                                     NSError *error = [NSError errorWithDomain:kEXUpdatesFileDownloaderErrorDomain code:1003 userInfo:@{NSLocalizedDescriptionKey: @"Manifest verification failed"}];
@@ -100,7 +100,7 @@ NSTimeInterval const kEXUpdatesDefaultTimeoutInterval = 60;
                                                 }
       ];
     } else {
-      EXUpdatesUpdate *update = [EXUpdatesUpdate updateWithManagedManifest:(NSDictionary *)manifest];
+      EXUpdatesUpdate *update = [EXUpdatesUpdate updateWithManifest:(NSDictionary *)manifest];
       successBlock(update);
     }
   } errorBlock:errorBlock];
