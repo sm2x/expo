@@ -95,7 +95,8 @@ static NSString * const kEXUpdatesDatabaseFilename = @"updates.db";
    PRAGMA foreign_keys = ON;\
    CREATE TABLE \"updates\" (\
    \"id\"  BLOB UNIQUE,\
-   \"commit_time\"  INTEGER NOT NULL UNIQUE,\
+   \"project_identifier\"  TEXT NOT NULL,\
+   \"commit_time\"  INTEGER NOT NULL,\
    \"runtime_version\"  TEXT NOT NULL,\
    \"launch_asset_id\" INTEGER,\
    \"metadata\"  TEXT,\
@@ -122,6 +123,7 @@ static NSString * const kEXUpdatesDatabaseFilename = @"updates.db";
    FOREIGN KEY(\"update_id\") REFERENCES \"updates\"(\"id\") ON DELETE CASCADE,\
    FOREIGN KEY(\"asset_id\") REFERENCES \"assets\"(\"id\") ON DELETE CASCADE\
    );\
+   CREATE UNIQUE INDEX \"index_updates_project_identifier_commit_time\" ON \"updates\" (\"project_identifier\", \"commit_time\");\
    CREATE INDEX \"index_updates_launch_asset_id\" ON \"updates\" (\"launch_asset_id\");\
    ";
 
@@ -140,12 +142,13 @@ static NSString * const kEXUpdatesDatabaseFilename = @"updates.db";
 
 - (void)addUpdate:(EXUpdatesUpdate *)update error:(NSError ** _Nullable)error
 {
-  NSString * const sql = @"INSERT INTO \"updates\" (\"id\", \"commit_time\", \"runtime_version\", \"metadata\", \"status\" , \"keep\")\
-  VALUES (?1, ?2, ?3, ?4, ?5, 1);";
+  NSString * const sql = @"INSERT INTO \"updates\" (\"id\", \"project_identifier\", \"commit_time\", \"runtime_version\", \"metadata\", \"status\" , \"keep\")\
+  VALUES (?1, ?2, ?3, ?4, ?5, ?6, 1);";
 
   [self _executeSql:sql
            withArgs:@[
                       update.updateId,
+                      update.projectIdentifier,
                       @([update.commitTime timeIntervalSince1970] * 1000),
                       update.runtimeVersion,
                       update.metadata ?: [NSNull null],

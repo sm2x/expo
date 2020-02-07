@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EXUpdatesUpdate ()
 
+@property (nonatomic, strong, readwrite) NSString *projectIdentifier;
 @property (nonatomic, strong, readwrite) NSDictionary *rawManifest;
 
 @end
@@ -21,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
   if (self = [super init]) {
     _rawManifest = manifest;
+    _projectIdentifier = [EXUpdatesConfig sharedInstance].remoteUrl.absoluteString;
   }
   return self;
 }
