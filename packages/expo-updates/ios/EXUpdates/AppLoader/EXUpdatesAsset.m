@@ -14,4 +14,15 @@
   return self;
 }
 
+- (NSString * _Nullable)localAssetsKey
+{
+  if (!_localAssetsKey) {
+    NSString *remoteFilename = _url.lastPathComponent;
+    if (remoteFilename) {
+      _localAssetsKey = [NSString stringWithFormat:@"%@.%@", remoteFilename, _type];
+    }
+  }
+  return _localAssetsKey;
+}
+
 @end

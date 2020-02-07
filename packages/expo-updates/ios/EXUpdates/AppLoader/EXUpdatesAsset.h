@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSString * _Nullable contentHash;
 @property (nonatomic, strong) NSDictionary * _Nullable headers;
 
+@property (nonatomic, strong) NSString * _Nullable localAssetsKey;
+
 - (instancetype _Nonnull)initWithUrl:(NSURL * _Nonnull)url type:(NSString * _Nonnull)type;
 
 @end
