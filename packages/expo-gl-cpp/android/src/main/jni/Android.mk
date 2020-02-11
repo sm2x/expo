@@ -8,14 +8,12 @@ LOCAL_MODULE := expo-gl
 LOCAL_C_INCLUDES += ../../../../cpp/
 LOCAL_SRC_FILES := \
   ../../../../cpp/UEXGL.cpp \
-  ../../../../cpp/EXJSUtils.cpp \
+  ../../../../cpp/EXGLImageUtils.cpp \
   ../../../../cpp/EXGLContext.cpp \
-  ../../../../cpp/EXGLInstallMethods.cpp \
-  ../../../../cpp/EXGLInstallConstants.cpp \
   ../../../../cpp/EXGLNativeMethods.cpp \
   EXGL.cpp
 
-LOCAL_CFLAGS := -fexceptions -frtti -O3
+LOCAL_CFLAGS := -fexceptions -frtti -g
 LOCAL_STATIC_LIBRARIES := libjsi
 LOCAL_SHARED_LIBRARIES := libfolly_json glog
 
