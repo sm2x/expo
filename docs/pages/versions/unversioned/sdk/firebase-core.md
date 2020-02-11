@@ -35,6 +35,12 @@ For bare React Native projects, you must ensure that you have [installed and con
 - [Add the Android `google-services.json` to your `android/app` folder](https://firebase.google.com/docs/android/setup#add-config-file)
 - [Add the iOS `GoogleService-Info.plist` to your XCode project](https://firebase.google.com/docs/ios/setup#add-config-file)
 
+## Native Firebase packages
+
+At the moment, only Firebase Analytics is supported natively. We are working on bringing more native Firebase packages to Expo, stay tuned :)
+
+- [expo-firebase-analytics](./firebase-anlytics.md)
+
 ## API
 
 ```js
