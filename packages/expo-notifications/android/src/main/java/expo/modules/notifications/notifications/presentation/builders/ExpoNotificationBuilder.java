@@ -180,7 +180,7 @@ public class ExpoNotificationBuilder implements NotificationBuilder {
    */
   private boolean shouldPlaySound() {
     //                                                                         if SOUND_KEY is not an explicit false we fallback to true
-    return (mAllowedBehavior == null || mAllowedBehavior.shouldPlaySound()) && !mNotificationRequest.optBoolean(SOUND_KEY, true);
+    return (mAllowedBehavior == null || mAllowedBehavior.shouldPlaySound()) && mNotificationRequest.optBoolean(SOUND_KEY, true);
   }
 
   /**
@@ -194,7 +194,7 @@ public class ExpoNotificationBuilder implements NotificationBuilder {
    */
   private boolean shouldVibrate() {
     //                                                                         if VIBRATE_KEY is not an explicit false we fallback to true
-    return (mAllowedBehavior == null || mAllowedBehavior.shouldPlaySound()) && !mNotificationRequest.optBoolean(VIBRATE_KEY, true);
+    return (mAllowedBehavior == null || mAllowedBehavior.shouldPlaySound()) && mNotificationRequest.optBoolean(VIBRATE_KEY, true);
   }
 
   private boolean shouldSetBadge() {
