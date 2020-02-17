@@ -61,6 +61,6 @@ dependencies {
   unimodule 'unimodules-permissions-interface'
   unimodule 'unimodules-image-loader-interface'
 
-  api 'androidx.core:core:1.1.0'
+  api 'androidx.core:core:1.2.0'
   api 'com.google.firebase:firebase-messaging:20.1.0'
 }
