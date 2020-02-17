@@ -13,7 +13,6 @@ import java.util.List;
 
 import expo.modules.notifications.installationid.InstallationIdProvider;
 import expo.modules.notifications.notifications.NotificationManager;
-import expo.modules.notifications.notifications.channels.ExpoNotificationChannelsManager;
 import expo.modules.notifications.notifications.emitting.NotificationsEmitter;
 import expo.modules.notifications.notifications.handling.NotificationsHandler;
 import expo.modules.notifications.notifications.presentation.ExpoNotificationBuilderFactory;
@@ -42,8 +41,7 @@ public class NotificationsPackage extends BasePackage {
   public List<SingletonModule> createSingletonModules(Context context) {
     return Arrays.asList(
         new PushTokenManager(),
-        new NotificationManager(),
-        new ExpoNotificationChannelsManager(context)
+        new NotificationManager()
     );
   }
 }
