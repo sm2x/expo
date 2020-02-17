@@ -67,7 +67,7 @@ class EXGLContext {
   void endNextBatch() noexcept {
     std::lock_guard<std::mutex> lock(backlogMutex);
     backlog.emplace_back();
-    backlog.back().reserve(nextBatch.size());
+    backlog.back().reserve(16); // TODO add explanation for 16
     backlog.back().swap(nextBatch);
   }
 
