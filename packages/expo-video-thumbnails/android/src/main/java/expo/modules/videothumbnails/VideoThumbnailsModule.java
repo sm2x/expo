@@ -17,12 +17,16 @@ import org.unimodules.core.utilities.FileUtilities;
 import org.unimodules.interfaces.filesystem.FilePermissionModuleInterface;
 import org.unimodules.interfaces.filesystem.Permission;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class VideoThumbnailsModule extends ExportedModule {
   private static final String TAG = "ExpoVideoThumbnails";
@@ -34,9 +38,11 @@ public class VideoThumbnailsModule extends ExportedModule {
   private static final String KEY_HEADERS = "headers";
 
   private ModuleRegistry mModuleRegistry;
+  private File mCacheDir;
 
   public VideoThumbnailsModule(Context context) {
     super(context);
+    mCacheDir = context.getCacheDir();
   }
 
   @Override
@@ -52,10 +58,13 @@ public class VideoThumbnailsModule extends ExportedModule {
   private static class GetThumbnailAsyncTask extends AsyncTask<Void, Void, Bitmap> {
     private String mSourceFilename;
     private ReadableArguments mVideoOptions;
+    private File mCacheDir;
+    Exception mError;
 
-    GetThumbnailAsyncTask(String sourceFilename, ReadableArguments videoOptions) {
+    GetThumbnailAsyncTask(String sourceFilename, ReadableArguments videoOptions, File cacheDir) {
       mSourceFilename = sourceFilename;
       mVideoOptions = videoOptions;
+      mCacheDir = cacheDir;
     }
 
     @Override
@@ -65,10 +74,50 @@ public class VideoThumbnailsModule extends ExportedModule {
       MediaMetadataRetriever retriever = new MediaMetadataRetriever();
       if (URLUtil.isFileUrl(mSourceFilename)) {
         retriever.setDataSource(Uri.decode(mSourceFilename).replace("file://", ""));
+        return retriever.getFrameAtTime(time, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
       } else {
-        retriever.setDataSource(Uri.decode(mSourceFilename), headers);
+        File downloadedFile = download(Uri.decode(mSourceFilename), headers);
+        if (downloadedFile == null) {
+          return null;
+        }
+        retriever.setDataSource(downloadedFile.getAbsolutePath());
+        Bitmap thumbnail = retriever.getFrameAtTime(time, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        downloadedFile.delete();
+        return thumbnail;
       }
-      return retriever.getFrameAtTime(time, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+    }
+
+    private File download(String url, Map headers) {
+      File output = new File(mCacheDir + File.separator + UUID.randomUUID().toString());
+      HttpURLConnection httpURLConnection = null;
+      try {
+        httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
+
+        // add headers
+        for (Object key : headers.keySet()) {
+          httpURLConnection.setRequestProperty(key.toString(), headers.get(key).toString());
+        }
+
+        // get response and save it as a file
+        try (DataInputStream dataInputStream = new DataInputStream(httpURLConnection.getInputStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(output)) {
+          byte[] buffer = new byte[1024];
+          int length;
+
+          while ((length = dataInputStream.read(buffer)) > 0) {
+            fileOutputStream.write(buffer, 0, length);
+          }
+        }
+
+        return output;
+      } catch (IOException | SecurityException e) {
+        mError = e;
+        return null;
+      } finally {
+        if (httpURLConnection != null) {
+          httpURLConnection.disconnect();
+        }
+      }
     }
   }
 
@@ -82,6 +131,7 @@ public class VideoThumbnailsModule extends ExportedModule {
     return true;
   }
 
+
   @ExpoMethod
   public void getThumbnail(String sourceFilename, final ReadableArguments videoOptions, final Promise promise) {
     if (URLUtil.isFileUrl(sourceFilename) && !isAllowedToRead(Uri.decode(sourceFilename).replace("file://", ""))) {
@@ -89,15 +139,15 @@ public class VideoThumbnailsModule extends ExportedModule {
       return;
     }
 
-    GetThumbnailAsyncTask getThumbnailAsyncTask = new GetThumbnailAsyncTask(sourceFilename, videoOptions) {
+    GetThumbnailAsyncTask getThumbnailAsyncTask = new GetThumbnailAsyncTask(sourceFilename, videoOptions, getContext().getCacheDir()) {
       @Override
       protected void onPostExecute(Bitmap thumbnail) {
-        if (thumbnail == null) {
-          promise.reject(ERR_COULD_NOT_GET_THUMBNAIL, "Could not get thumbnail.");
+        if (thumbnail == null || mError != null) {
+          promise.reject(ERR_COULD_NOT_GET_THUMBNAIL, "Could not get thumbnail.", mError);
           return;
         }
         try {
-          String path = FileUtilities.generateOutputPath(getContext().getCacheDir(), "VideoThumbnails", "jpg");
+          String path = FileUtilities.generateOutputPath(mCacheDir, "VideoThumbnails", "jpg");
           OutputStream outputStream = new FileOutputStream(path);
           thumbnail.compress(Bitmap.CompressFormat.JPEG, (int) (videoOptions.getDouble(KEY_QUALITY, 1) * 100), outputStream);
           outputStream.flush();
